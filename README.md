@@ -5,6 +5,8 @@ dotnet core 分库dal  转自携程dal https://github.com/ctripcorp/dal/tree/mas
 
 测试sql文件 https://github.com/wangchengqun/DotNetDAL/blob/master/sql.sql
 
+计划加个后台,在同步ES和mongodb
+
 
 
 
