@@ -41,11 +41,13 @@ namespace Arch.Data.Common.Vi
 
         public static IHABean GetHABean()
         {
+            
             return proxy.GetHABean();
         }
 
         public static IMarkDownBean GetMarkDownBean()
         {
+            
             return proxy.GetMarkDownBean();
         }
 

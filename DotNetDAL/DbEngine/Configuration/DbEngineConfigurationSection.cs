@@ -27,7 +27,7 @@ namespace Arch.Data.DbEngine.Configuration
 
             ConnectionLocator = new ConnectionLocatorElement();
 
-            //databaseProviders = new ConfigurationProperty("databaseProviders", typeof(DatabaseProviderElementCollection), null, ConfigurationPropertyOptions.None);
+         
             //logListeners = new ConfigurationProperty("logListeners", typeof(ListenerElementCollection), null, ConfigurationPropertyOptions.None);
             //metrics = new ConfigurationProperty("metrics", typeof(MetricsElement), null, ConfigurationPropertyOptions.None);
             //tracing = new ConfigurationProperty("tracing", typeof(TracingElement), null, ConfigurationPropertyOptions.None);

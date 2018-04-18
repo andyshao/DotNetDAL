@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Arch.Data.Common.Logging.Configuration
 {
-    public sealed class ListenerElement //: ConfigurationElement
+    public sealed class ListenerElement
     {
         #region private field
 
@@ -36,33 +36,24 @@ namespace Arch.Data.Common.Logging.Configuration
         /// <summary>
         /// 名称,关键字
         /// </summary>
-        //[ConfigurationProperty(c_NameProperty, IsRequired = true)]
         public String Name
         {
-            //get { return (String)this[c_NameProperty]; }
-            //set { this[c_NameProperty] = value; }
             get;set;
         }
 
         /// <summary>
         /// 级别
         /// </summary>
-        //[ConfigurationProperty(c_LevelProperty)]
         public LogLevel Level
         {
-            //get { return (LogLevel)this[c_LevelProperty]; }
-            //set { this[c_LevelProperty] = value; }
             get;set;
         }
 
         /// <summary>
         /// 类型名称
         /// </summary>
-        //[ConfigurationProperty(c_TypeProperty, DefaultValue = "")]
         public String TypeName
         {
-            //get { return (String)this[c_TypeProperty]; }
-            //set { this[c_TypeProperty] = value; }
             get;set;
         }
 
@@ -78,11 +69,8 @@ namespace Arch.Data.Common.Logging.Configuration
         /// <summary>
         /// 初始化配置
         /// </summary>
-        //[ConfigurationProperty(c_SettingProperty, DefaultValue = "")]
         public String Setting
         {
-            //get { return (String)this[c_SettingProperty]; }
-            //set { this[c_SettingProperty] = value; }
             get;set;
         }
 

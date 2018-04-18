@@ -38,11 +38,20 @@ namespace Arch.Data.Common.Logging
 
         public void MetricsLog(String databaseSet, DatabaseType dbType, OperationType optType) { }
 
-        public void MetricsMarkdown(MarkDownMetrics metrics) { }
+        public void MetricsMarkdown(MarkDownMetrics metrics)
+        {
 
-        public void MetricsMarkup(MarkUpMetrics metrics) { }
+        }
 
-        public void MetricsRW(String databaseSet, String databaseName, Boolean success) { }
+        public void MetricsMarkup(MarkUpMetrics metrics)
+        {
+
+        }
+
+        public void MetricsRW(String databaseSet, String databaseName, Boolean success)
+        {
+
+        }
 
         public void MetricsFailover(String databaseSet, String allInOneKey) { }
 

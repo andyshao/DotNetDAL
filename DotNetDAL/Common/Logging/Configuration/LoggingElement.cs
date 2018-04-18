@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Arch.Data.Common.Logging.Configuration
 {
-    public sealed class LoggingElement //: ConfigurationElement
+    public sealed class LoggingElement 
     {
         /// <summary>
         /// 类型
@@ -15,19 +15,13 @@ namespace Arch.Data.Common.Logging.Configuration
         /// <summary>
         /// 类型
         /// </summary>
-        //[ConfigurationProperty(type)]
         public String TypeName
         {
-            //get { return (String)this[type]; }
-            //set { this[type] = value; }
             get;set;
         }
 
-        //[ConfigurationProperty(logEntryType)]
         public String LogEntryTypeName
         {
-            //get { return (String)this[logEntryType]; }
-            //set { this[logEntryType] = value; }
             get;set;
         }
 

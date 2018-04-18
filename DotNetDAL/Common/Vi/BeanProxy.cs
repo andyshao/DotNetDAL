@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Arch.Data.Common.Vi
 {
     class BeanProxy : IBeanProxy
@@ -18,11 +20,13 @@ namespace Arch.Data.Common.Vi
 
         public IHABean GetHABean()
         {
+
             return AbstractHABean.GetInstance();
         }
 
         public IMarkDownBean GetMarkDownBean()
         {
+            
             return AbstractMarkDownBean.GetInstance();
         }
 

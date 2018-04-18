@@ -24,6 +24,7 @@ namespace Arch.Data.Common.Vi
 
         public static IMarkDownBean GetInstance()
         {
+
             return bean;
         }
 

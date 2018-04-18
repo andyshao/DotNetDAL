@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Arch.Data.Common.Tracing.Configuration
 {
-    public sealed class TracingElement //: ConfigurationElement
+    public sealed class TracingElement 
     {
         /// <summary>
         /// 名称
@@ -18,22 +18,16 @@ namespace Arch.Data.Common.Tracing.Configuration
         /// <summary>
         /// 名称,关键字
         /// </summary>
-        //[ConfigurationProperty(name, DefaultValue = "CentralLogging")]
         public String Name
         {
-            //get { return (String)this[name]; }
-            //set { this[name] = value; }
             get;set;
         }
 
         /// <summary>
         /// 开关
         /// </summary>
-        //[ConfigurationProperty(turn, DefaultValue = "on")]
         public String Turn
         {
-            //get { return (String)this[turn]; }
-            //set { this[turn] = value; }
             get;set;
         }
 
