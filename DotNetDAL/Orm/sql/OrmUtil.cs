@@ -490,26 +490,26 @@ namespace Arch.Data.Orm.sql
                     while (reader.Read())
                     {
                         T item = Activator.CreateInstance<T>();
-                        PropertyInfo[] TpropertyInfo = typeof(T).GetProperties(System.Reflection.BindingFlags.Instance
-                            | System.Reflection.BindingFlags.Public
-                            | System.Reflection.BindingFlags.NonPublic);
-                        foreach (PropertyInfo pInfo in TpropertyInfo)
-                        {
-                            string pInfo_name = pInfo.Name;
-                            Int32 columnIndex = getFieldIndex(columnNameDict, pInfo_name, reader);
-                            Type columnType = getFieldType(typeDict, columnIndex, reader);
-                            Object value = getFieldValue(columnIndex, columnType, columnType, reader);
-                            pInfo.SetValue(item, value, null);
-                        }
 
-
-                        //foreach (SqlColumn column in sqlColumns)
+                        //PropertyInfo[] TpropertyInfo = typeof(T).GetProperties(System.Reflection.BindingFlags.Instance
+                        //    | System.Reflection.BindingFlags.Public
+                        //    | System.Reflection.BindingFlags.NonPublic);
+                        //foreach (PropertyInfo pInfo in TpropertyInfo)
                         //{
-                        //    Int32 columnIndex = getFieldIndex(columnNameDict, column.Name, reader);
+                        //    string pInfo_name = pInfo.Name;
+                        //    Int32 columnIndex = getFieldIndex(columnNameDict, pInfo_name, reader);
                         //    Type columnType = getFieldType(typeDict, columnIndex, reader);
-                        //    Object value = getFieldValue(columnIndex, columnType, column.DataType, reader);
-                        //    //column.SetValue(item, value);
+                        //    Object value = getFieldValue(columnIndex, columnType, columnType, reader);
+                        //    pInfo.SetValue(item, value, null);
                         //}
+
+                        foreach (SqlColumn column in sqlColumns)
+                        {
+                            Int32 columnIndex = getFieldIndex(columnNameDict, column.Name, reader);
+                            Type columnType = getFieldType(typeDict, columnIndex, reader);
+                            Object value = getFieldValue(columnIndex, columnType, column.DataType, reader);
+                            column.SetValue(item, value);
+                        }
 
                         list.Add(item);
                     }
@@ -562,13 +562,12 @@ namespace Arch.Data.Orm.sql
                             pInfo.SetValue(item, value, null);
                         }
 
-
                         //foreach (SqlColumn column in sqlColumns)
                         //{
                         //    Int32 columnIndex = getFieldIndex(columnNameDict, column.Name, dataTable);
                         //    Type columnType = getFieldType(typeDict, columnIndex, dataTable);
-                        //    //Object value = getFieldValue(columnIndex, columnType, column.DataType, dataRow);
-                        //    // column.SetValue(item, value);
+                        //    Object value = getFieldValue(columnIndex, columnType, column.DataType, dataRow);
+                        //    column.SetValue(item, value);
                         //}
 
                         list.Add(item);

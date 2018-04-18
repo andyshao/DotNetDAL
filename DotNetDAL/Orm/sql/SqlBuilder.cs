@@ -83,19 +83,19 @@ namespace Arch.Data.Orm.sql
                 if (ignoreIdColumn && item.IsID) continue;
                 if (ignorePkColumn && item.IsPK) continue;
 
-                //if (ignoreNullValue)
-                //{
-                //    if (entity == null)
-                //        continue;
+                if (ignoreNullValue)
+                {
+                    if (entity == null)
+                        continue;
 
-                //    Object value = item.Data.Read(entity);
+                    Object value = item.Data.Read(entity);
 
-                //    if (value == null)
-                //        continue;
-                //}
+                    if (value == null)
+                        continue;
+                }
 
-                //if (ignoreColumn && item.IsIgnored)
-                //    continue;
+                if (ignoreColumn && item.IsIgnored)
+                    continue;
 
                 String key = quote ? dbDialect.Quote(item.Name.ToUpper()) : item.Name.ToUpper();
                 columnsDict[key] = item;
@@ -252,9 +252,9 @@ namespace Arch.Data.Orm.sql
                 foreach (var column in list)
                 {
                     DbType dbType = SqlUtils.GetDbType(column);
-                    var prop = item.GetType().GetProperties()
-                        .Where(x => x.Name.ToLower() == column.Name).FirstOrDefault();
-                    Object value = prop.GetValue(item); //column.Data.Read(item);
+                    //var prop = item.GetType().GetProperties()
+                    //    .Where(x => x.Name.ToLower() == column.Name).FirstOrDefault();
+                    Object value = column.Data.Read(item);//prop.GetValue(item); //
 
                     if (isVersionLock)
                     {

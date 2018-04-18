@@ -72,11 +72,10 @@ namespace Arch.Data.Orm.FastInvoker
         /// </summary>
         /// <param name="generator"></param>
         /// <param name="type"></param>
-        public static void BoxIfNeeded(dynamic generator, Type type)
+        public static void BoxIfNeeded(ILGenerator generator, Type type)
         {
 
-
-          //  if (type.IsValueType) generator.Emit(OpCodes.Box, type);
+            if (type.IsValueType) generator.Emit(OpCodes.Box, type);
         }
 
         /// <summary>
@@ -84,9 +83,9 @@ namespace Arch.Data.Orm.FastInvoker
         /// </summary>
         /// <param name="generator"></param>
         /// <param name="type"></param>
-        public static void UnboxIfNeeded(dynamic generator, Type type)
+        public static void UnboxIfNeeded(ILGenerator generator, Type type)
         {
-           // if (type.IsValueType) generator.Emit(OpCodes.Unbox_Any, type);
+            if (type.IsValueType) generator.Emit(OpCodes.Unbox_Any, type);
         }
     }
 }

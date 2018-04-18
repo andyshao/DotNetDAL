@@ -284,11 +284,11 @@ namespace Arch.Data.DbEngine.Sharding
                 if (dict.ContainsKey(name))
                 {
 
-                    var mo = entity.GetType().GetProperties().Where(x => x.Name.ToLower() == name)
-                        .FirstOrDefault();
-                    mo.GetValue(entity);
-
-                    shardColumnValue = mo.GetValue(entity) as IComparable; //dict[name].Data.Read(entity) as IComparable;
+                    //var mo = entity.GetType().GetProperties().Where(x => x.Name.ToLower() == name)
+                    //    .FirstOrDefault();
+                    //mo.GetValue(entity);
+                    // mo.GetValue(entity)
+                    shardColumnValue = dict[name].Data.Read(entity) as IComparable;
                     break;
                 }
             }

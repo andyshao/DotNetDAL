@@ -39,7 +39,6 @@ namespace Arch.Data.Orm.sql
 
         public Object Read(Object obj)
         {
-            //return obj;
             return dynamicPropertyInfo.GetValue(obj, null);
         }
 

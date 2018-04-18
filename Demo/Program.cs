@@ -18,30 +18,34 @@ namespace Demo
 
             BaseDao dao = BaseDaoFactory.CreateBaseDao("dao_test");
 
-            //添加
-            for (int i = 0; i < 100000; i++)
-            {
-                dao.Insert<test0>(new test0()
-                {
-                    Address = "上海" + i,
-                    Id = i,
-                    Name = "王" + i
-                });
-                Console.WriteLine(i);
-            }
+            ////添加
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    dao.Insert<test0>(new test0()
+            //    {
+            //        Address = "上海" + i,
+            //        Id = i,
+            //        Name = "王" + i
+            //    });
+            //    Console.WriteLine(i);
+            //}
+
+            /////修改
+            //dao.Update<test0>(new test0()
+            //{
+            //    Address = "上海测试",
+            //    Id = 1,
+            //    Name = "王测试"
+
+            //});
 
             //分页查询
-            //IList<string> ilist = new List<string> { "0", "1" };
-            //IDictionary hints = new Dictionary<string, object>();
-            //hints.Add(DALExtStatementConstant.SHARD_IDS, ilist);
-            //var query = dao.GetQuery<test0>().Paging(1, 10, "Id", false);//.Equal("Name", "王10000");
+            IList<string> shardDb = new List<string> { "0", "1" };
+            IDictionary hints = new Dictionary<string, object>();
+            hints.Add(DALExtStatementConstant.SHARD_IDS, shardDb);
+            var query = dao.GetQuery<test0>().Paging(1, 10, "Id", false);//.Equal("Name", "王10000");
 
-
-            //while (true)
-            //{
-            //    var list_ = dao.SelectList<test0>(query, hints).OrderByDescending(x => x.Id).ToList();
-            //    System.Threading.Thread.Sleep(1000*2);
-            //}
+            var list_ = dao.SelectList<test0>(query, hints).OrderByDescending(x => x.Id).ToList();
 
 
             Console.ReadLine();

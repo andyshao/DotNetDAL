@@ -28,35 +28,34 @@ namespace Arch.Data.Orm.FastInvoker
         /// <returns></returns>
         public Object GetValue(Object obj, Object[] index)
         {
-            //if (getHandler != null) return getHandler(obj, index);
+            if (getHandler != null) return getHandler(obj, index);
 
-            //Int32 moduleKey = info.Module.GetHashCode();
-            //Int32 handlerKey = info.MetadataToken;
+            Int32 moduleKey = info.Module.GetHashCode();
+            Int32 handlerKey = info.MetadataToken;
 
-            //getHandler = DynamicCacheFactory<DynamicPropertyGetHandler>.Caches
-            //    .GetOrAdd(moduleKey, innerModuleKey => new ConcurrentDictionary<Int32, DynamicPropertyGetHandler>())
-            //    .GetOrAdd(handlerKey, innerHandlerKey => DynamicMethodFactory.CreateGetHandler(type, info));
+            getHandler = DynamicCacheFactory<DynamicPropertyGetHandler>.Caches
+                .GetOrAdd(moduleKey, innerModuleKey => new ConcurrentDictionary<Int32, DynamicPropertyGetHandler>())
+                .GetOrAdd(handlerKey, innerHandlerKey => DynamicMethodFactory.CreateGetHandler(type, info));
 
-            //return getHandler(obj, index);
-            return null;
+            return getHandler(obj, index);
         }
 
         public void SetValue(Object obj, Object value, Object[] index)
         {
-            //if (setHandler != null)
-            //{
-            //    setHandler(obj, value, index);
-            //    return;
-            //}
+            if (setHandler != null)
+            {
+                setHandler(obj, value, index);
+                return;
+            }
 
-            //Int32 moduleKey = info.Module.GetHashCode();
-            //Int32 handlerKey = info.MetadataToken;
+            Int32 moduleKey = info.Module.GetHashCode();
+            Int32 handlerKey = info.MetadataToken;
 
-            //setHandler = DynamicCacheFactory<DynamicPropertySetHandler>.Caches
-            //    .GetOrAdd(moduleKey, innerModuleKey => new ConcurrentDictionary<Int32, DynamicPropertySetHandler>())
-            //    .GetOrAdd(handlerKey, innerHandlerKey => DynamicMethodFactory.CreateSetHandler(type, info));
+            setHandler = DynamicCacheFactory<DynamicPropertySetHandler>.Caches
+                .GetOrAdd(moduleKey, innerModuleKey => new ConcurrentDictionary<Int32, DynamicPropertySetHandler>())
+                .GetOrAdd(handlerKey, innerHandlerKey => DynamicMethodFactory.CreateSetHandler(type, info));
 
-            //setHandler(obj, value, index);
+            setHandler(obj, value, index);
         }
 
     }
