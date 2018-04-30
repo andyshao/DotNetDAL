@@ -28,9 +28,21 @@ namespace Arch.Data.DbEngine.Configuration
             DefaultLogger defaultLogger = new DefaultLogger();
             System.Threading.Tasks.Task.Run(() =>
             {
-                defaultLogger.RunLog();
+                bool bo = true;
+                while (bo)
+                {
+                    bo = false;
+                    try
+                    {
+                        defaultLogger.RunLog();
+                    }
+                    catch (Exception)
+                    {
+                        bo = true;
+                    }
+                }
             });
-           
+
             //logListeners = new ConfigurationProperty("logListeners", typeof(ListenerElementCollection), null, ConfigurationPropertyOptions.None);
             //metrics = new ConfigurationProperty("metrics", typeof(MetricsElement), null, ConfigurationPropertyOptions.None);
             //tracing = new ConfigurationProperty("tracing", typeof(TracingElement), null, ConfigurationPropertyOptions.None);

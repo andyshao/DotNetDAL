@@ -46,10 +46,11 @@ namespace Arch.Data.Common.Logging
         public void Success(ILogEntry entry, Statement statement, Stopwatch watch, Func<Int32> func)
         {
             watch.Stop();
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 AddLogDataBase(statement, watch);
             });
-           
+
 
         }
 
@@ -130,15 +131,50 @@ namespace Arch.Data.Common.Logging
                 while (true)
                 {
                     if (_queueLog.Count == 0)
-                        Thread.Sleep(1000*5);
+                        Thread.Sleep(1000 * 5);
                     var bo = _queueLog.TryDequeue(out log _log);
                     if (bo)
-                        bulkInsert.Store(_log);
+                        try
+                        {
+                            bulkInsert.Store(_log);
+                        }
+                        catch (Exception ex)
+                        {
+                            bulkInsert.Dispose();
+                            Thread.Sleep(1000 * 10);
+                            _queueLog.Enqueue(_log);
+                            break;
+                        }
                 }
             }
         }
 
         private void AddLogDataBase(Statement statement, Stopwatch stopwatch)
+        {
+            switch (statement.SqlOperationType)
+            {
+                case SqlStatementType.UNKNOWN:
+                    break;
+                case SqlStatementType.SELECT:
+                    break;
+                case SqlStatementType.INSERT:
+                    AddLogQueue(statement, stopwatch, "INSERT");
+                    break;
+                case SqlStatementType.UPDATE:
+                    AddLogQueue(statement, stopwatch, "UPDATE");
+                    break;
+                case SqlStatementType.DELETE:
+                    AddLogQueue(statement, stopwatch, "DELETE");
+                    break;
+                case SqlStatementType.SP:
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        private void AddLogQueue(Statement statement, Stopwatch stopwatch, string operationType)
         {
             string sql = statement.StatementText;
             string DatabaseSet = statement.DatabaseSet;
@@ -161,9 +197,13 @@ namespace Arch.Data.Common.Logging
                 databaseSet = DatabaseSet,
                 rollBackSql = "",
                 sql = sql,
-                milliseconds = stopwatch.ElapsedMilliseconds
+                milliseconds = stopwatch.ElapsedMilliseconds,
+                operationType = operationType
             });
         }
+
+
+
         #endregion
 
     }
@@ -221,7 +261,10 @@ namespace Arch.Data.Common.Logging
     public class log
     {
         public string sql { get; set; }
-        public object databaseSet { get; set; }
+
+        public string databaseSet { get; set; }
+
+        public string operationType { get; set; }
 
         public long milliseconds { get; set; }
 
