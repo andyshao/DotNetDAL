@@ -13,6 +13,17 @@ namespace DAL.DbEngine.Configuration
         public List<databaseSets> databaseSets { get; set; }
 
         public List<Connections> connections { get; set; }
+
+        /// <summary>
+        /// 日志数据库地址
+        /// </summary>
+        public List<string> logDataBaseUrl { get; set; }
+
+        /// <summary>
+        /// 日志数据库名称
+        /// </summary>
+        public string logDatabase { get; set; }
+
     }
 
     /// <summary>

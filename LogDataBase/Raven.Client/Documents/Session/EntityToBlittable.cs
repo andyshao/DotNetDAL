@@ -1,0 +1,279 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Raven.Client.Documents.Conventions;
+using Raven.Client.Json;
+using Raven.Client.Util;
+using Sparrow.Json;
+using Sparrow.Json.Parsing;
+
+namespace Raven.Client.Documents.Session
+{
+    public class EntityToBlittable
+    {
+        private readonly InMemoryDocumentSessionOperations _session;
+
+        /// <summary>
+        /// All the listeners for this session
+        /// </summary>
+        public EntityToBlittable(InMemoryDocumentSessionOperations session)
+        {
+            _session = session;
+        }
+
+        private readonly Dictionary<object, Dictionary<object, object>> _missingDictionary =
+            new Dictionary<object, Dictionary<object, object>>(ObjectReferenceEqualityComparer<object>.Default);
+
+        public BlittableJsonReaderObject ConvertEntityToBlittable(object entity, DocumentInfo documentInfo)
+        {
+            //maybe we don't need to do anything..
+            if (entity is BlittableJsonReaderObject blittable)
+                return blittable;
+
+            using (DefaultRavenContractResolver.RegisterExtensionDataGetter(FillMissingProperties))
+            using (var writer = new BlittableJsonWriter(_session.Context, documentInfo))
+            {
+                return ConvertEntityToBlittableInternal(entity, _session.Conventions, _session.Context, _session.JsonSerializer, writer);
+            }
+        }
+
+        private IEnumerable<KeyValuePair<object, object>> FillMissingProperties(object o)
+        {
+            _missingDictionary.TryGetValue(o, out var props);
+            return props;
+        }
+        
+        public static BlittableJsonReaderObject ConvertEntityToBlittable(
+            object entity,
+            DocumentConventions conventions,
+            JsonOperationContext context,
+            JsonSerializer serializer = null,
+            DocumentInfo documentInfo = null)
+        {
+            using (var writer = new BlittableJsonWriter(context, documentInfo))
+                return ConvertEntityToBlittableInternal(entity, conventions, context, serializer ?? conventions.CreateSerializer(), writer);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static BlittableJsonReaderObject ConvertEntityToBlittableInternal(
+            object entity,
+            DocumentConventions conventions,
+            JsonOperationContext context,
+            JsonSerializer serializer,
+            BlittableJsonWriter writer)
+        {
+            serializer.Serialize(writer, entity);
+            writer.FinalizeDocument();
+            var reader = writer.CreateReader();
+            var type = entity.GetType();
+
+            var changes = TryRemoveIdentityProperty(reader, type, conventions);
+            changes |= TrySimplifyJson(reader);
+
+            if (changes)
+                reader = context.ReadObject(reader, "convert/entityToBlittable");
+
+            return reader;
+        }
+
+        private void RegisterMissingProperties(object o, string id, object value)
+        {
+            if (_session.Conventions.PreserveDocumentPropertiesNotFoundOnModel == false ||
+                id == Constants.Documents.Metadata.Key)
+                return;
+
+            if (_missingDictionary.TryGetValue(o, out var dictionary) == false)
+            {
+                _missingDictionary[o] = dictionary = new Dictionary<object, object>();
+            }
+
+            dictionary[id] = value;
+        }
+
+        /// <summary>
+        /// Converts a BlittableJsonReaderObject to an entity.
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <param name="id">The id.</param>
+        /// <param name="document">The document found.</param>
+        /// <returns>The converted entity</returns>
+        public object ConvertToEntity(Type entityType, string id, BlittableJsonReaderObject document)
+        {
+            try
+            {
+                if (entityType == typeof(BlittableJsonReaderObject))
+                {
+                    return document;
+                }
+
+                var defaultValue = InMemoryDocumentSessionOperations.GetDefaultValue(entityType);
+                var entity = defaultValue;
+
+                using (DefaultRavenContractResolver.RegisterExtensionDataSetter(RegisterMissingProperties))
+                {
+                    var documentType = _session.Conventions.GetClrType(id, document);
+                    if (documentType != null)
+                    {
+                        var type = Type.GetType(documentType);
+                        if (type != null && entityType.IsAssignableFrom(type))
+                        {
+                            entity = _session.Conventions.DeserializeEntityFromBlittable(type, document);
+                        }
+                    }
+
+                    if (Equals(entity, defaultValue))
+                    {
+                        entity = _session.Conventions.DeserializeEntityFromBlittable(entityType, document);
+                    }
+                }
+
+                if (id != null)
+                    _session.GenerateEntityIdOnTheClient.TrySetIdentity(entity, id);
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Could not convert document {id} to entity of type {entityType}",
+                    ex);
+            }
+        }
+
+        /// <summary>
+        /// Converts a BlittableJsonReaderObject to an entity without a session.
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <param name="id">The id.</param>
+        /// <param name="document">The document found.</param>
+        /// <param name="conventions">The conventions.</param>
+        /// <returns>The converted entity</returns>
+        public static object ConvertToEntity(Type entityType, string id, BlittableJsonReaderObject document, DocumentConventions conventions)
+        {
+            try
+            {
+                var defaultValue = InMemoryDocumentSessionOperations.GetDefaultValue(entityType);
+                var entity = defaultValue;
+
+                var documentType = conventions.GetClrType(id, document);
+                if (documentType != null)
+                {
+                    var type = Type.GetType(documentType);
+                    if (type != null && entityType.IsAssignableFrom(type))
+                    {
+                        entity = conventions.DeserializeEntityFromBlittable(type, document);
+                    }
+                }
+
+                if (Equals(entity, defaultValue))
+                {
+                    entity = conventions.DeserializeEntityFromBlittable(entityType, document);
+                }
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Could not convert document {id} to entity of type {entityType}",
+                    ex);
+            }
+        }
+
+        private static bool TryRemoveIdentityProperty(BlittableJsonReaderObject document, Type entityType, DocumentConventions conventions)
+        {
+            var identityProperty = conventions.GetIdentityProperty(entityType);
+            if (identityProperty == null)
+                return false;
+
+            if (document.Modifications == null)
+                document.Modifications = new DynamicJsonValue(document);
+
+            document.Modifications.Remove(identityProperty.Name);
+            return true;
+        }
+
+        private static bool TrySimplifyJson(BlittableJsonReaderObject document)
+        {
+            var simplified = false;
+            foreach (var propertyName in document.GetPropertyNames())
+            {
+                var propertyValue = document[propertyName];
+
+                var propertyArray = propertyValue as BlittableJsonReaderArray;
+                if (propertyArray != null)
+                {
+                    simplified |= TrySimplifyJson(propertyArray);
+                    continue;
+                }
+
+                var propertyObject = propertyValue as BlittableJsonReaderObject;
+                if (propertyObject == null)
+                    continue;
+
+                if (propertyObject.TryGet(Constants.Json.Fields.Type, out string type) == false)
+                {
+                    simplified |= TrySimplifyJson(propertyObject);
+                    continue;
+                }
+
+                if (ShouldSimplifyJsonBasedOnType(type) == false)
+                    continue;
+
+                simplified = true;
+
+                if (document.Modifications == null)
+                    document.Modifications = new DynamicJsonValue(document);
+
+                if (propertyObject.TryGet(Constants.Json.Fields.Values, out BlittableJsonReaderArray values) == false)
+                {
+                    if (propertyObject.Modifications == null)
+                        propertyObject.Modifications = new DynamicJsonValue(propertyObject);
+
+                    propertyObject.Modifications.Remove(Constants.Json.Fields.Type);
+                    continue;
+                }
+
+                document.Modifications[propertyName] = values;
+
+                simplified |= TrySimplifyJson(values);
+            }
+
+            return simplified;
+        }
+
+        private static bool TrySimplifyJson(BlittableJsonReaderArray array)
+        {
+            var simplified = false;
+            foreach (var item in array)
+            {
+                var itemObject = item as BlittableJsonReaderObject;
+                if (itemObject == null)
+                    continue;
+
+                simplified |= TrySimplifyJson(itemObject);
+            }
+
+            return simplified;
+        }
+
+        private static bool ShouldSimplifyJsonBasedOnType(string typeValue)
+        {
+            var type = Type.GetType(typeValue);
+
+            if (type == null)
+                return false;
+
+            if (type.IsArray)
+                return true;
+
+            if (type.GetGenericArguments().Length == 0)
+                return type == typeof(Enumerable);
+
+            return typeof(IEnumerable).IsAssignableFrom(type.GetGenericTypeDefinition());
+        }
+    }
+}

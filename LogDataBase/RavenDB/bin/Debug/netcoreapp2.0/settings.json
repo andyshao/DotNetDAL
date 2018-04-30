@@ -1,0 +1,6 @@
+﻿{
+  "ServerUrl": "http://127.0.0.1:8888",
+  "Setup.Mode": "None",
+  "License.Eula.Accepted": true,
+  "tcpport": 9898
+}

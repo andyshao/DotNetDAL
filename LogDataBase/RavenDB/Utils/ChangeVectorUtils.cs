@@ -1,0 +1,254 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text;
+using Lucene.Net.Support;
+using Raven.Server.Documents.Replication;
+using Sparrow;
+using Sparrow.Utils;
+
+namespace Raven.Server.Utils
+{
+    public enum ConflictStatus
+    {
+        Update,
+        Conflict,
+        AlreadyMerged
+    }
+
+    public static class ChangeVectorUtils
+    {
+        public static ConflictStatus GetConflictStatus(string remoteAsString, string localAsString)
+        {
+            if (remoteAsString == localAsString)
+                return ConflictStatus.AlreadyMerged;
+
+            if (string.IsNullOrEmpty(remoteAsString))
+                return ConflictStatus.AlreadyMerged;
+
+            if (string.IsNullOrEmpty(localAsString))
+                return ConflictStatus.Update;
+
+            var local = localAsString.ToChangeVector();
+            var remote = remoteAsString.ToChangeVector();
+
+            //any missing entries from a change vector are assumed to have zero value
+            var localHasLargerEntries = false;
+            var remoteHasLargerEntries = false;
+
+            int numOfMatches = 0;
+            for (int i = 0; i < remote.Length; i++)
+            {
+                bool found = false;
+                for (int j = 0; j < local.Length; j++)
+                {
+                    if (remote[i].DbId == local[j].DbId)
+                    {
+                        found = true;
+                        numOfMatches++;
+
+                        if (remote[i].Etag > local[j].Etag)
+                        {
+                            remoteHasLargerEntries = true;
+                        }
+                        else if (remote[i].Etag < local[j].Etag)
+                        {
+                            localHasLargerEntries = true;
+                        }
+                        break;
+                    }
+                }
+                if (found == false)
+                {
+                    remoteHasLargerEntries = true;
+                }
+            }
+            if (numOfMatches < local.Length)
+            {
+                localHasLargerEntries = true;
+            }
+
+            if (remoteHasLargerEntries && localHasLargerEntries)
+                return ConflictStatus.Conflict;
+
+            if (remoteHasLargerEntries == false && localHasLargerEntries == false)
+                return ConflictStatus.AlreadyMerged; // change vectors identical
+
+            return remoteHasLargerEntries ? ConflictStatus.Update : ConflictStatus.AlreadyMerged;
+        }
+
+        [ThreadStatic] private static StringBuilder _changeVectorBuffer;
+
+
+        static ChangeVectorUtils()
+        {
+            ThreadLocalCleanup.ReleaseThreadLocalState += () =>
+            {
+                _changeVectorBuffer = null;
+                _mergeVectorBuffer = null;
+            };
+        }
+
+        private static int NumberOfDigits(long etag)
+        {
+            int count = 0;
+            do
+            {
+                count++;
+                etag /= 10;
+            } while (etag != 0);
+            return count;
+        }
+
+        private static long ParseToLong(string s, int start, int len)
+        {
+            int num;
+            num = s[start] - '0';
+            for (int i = 1; i < len; i++)
+            {
+                num *= 10;
+                num += s[start + i] - '0';
+            }
+            return num;
+        }
+
+        public static (bool IsValid, string ChangeVector) TryUpdateChangeVector(string nodeTag, string dbIdInBase64, long etag, string oldChangeVector)
+        {
+            InitializeThreadLocalState();
+
+            Debug.Assert(oldChangeVector != null);
+
+            // PERF: Avoid paying the threadstatic sync code every time. 
+            var vectorBuffer = _changeVectorBuffer;
+
+            var dbIndex = oldChangeVector.IndexOf(dbIdInBase64, StringComparison.Ordinal);
+            if (dbIndex < 0)
+            {
+                if (string.IsNullOrEmpty(oldChangeVector) == false)
+                {
+                    vectorBuffer.Append(oldChangeVector)
+                        .Append(", ");
+                }
+
+                vectorBuffer.Append(nodeTag)
+                    .Append(':')
+                    .Append(etag)
+                    .Append('-')
+                    .Append(dbIdInBase64);
+
+                return (true, vectorBuffer.ToString());
+            }
+
+            int newEtagSize = NumberOfDigits(etag);
+
+            var existingEtagEndIndex = dbIndex - 1;
+            var currentEtagStartIndex = oldChangeVector.LastIndexOf(':', existingEtagEndIndex) + 1;
+
+            var existingLen = existingEtagEndIndex - currentEtagStartIndex;
+            var existingEtag = ParseToLong(oldChangeVector, currentEtagStartIndex, existingLen);
+            // assume no trailing zeros
+            var diff = newEtagSize - existingLen;
+            if (diff == 0)
+            {
+                // compare the strings instead of parsing to int
+                if (existingEtag >= etag)
+                {
+                    //nothing to do
+                    return (false, null);
+                }
+                // we clone the string because others might hold a reference to it and consider it immutable
+                vectorBuffer.Append(oldChangeVector);
+
+                // replace the etag
+
+                Format.Backwards.WriteNumber(vectorBuffer, currentEtagStartIndex + newEtagSize - 1, etag);
+                return (true, vectorBuffer.ToString());
+            }
+
+            if (diff < 0)
+            {
+                // nothing to do, already known to be smaller
+                return (false, null);
+            }
+
+            // allocate new string
+            vectorBuffer.Append(oldChangeVector, 0, currentEtagStartIndex)
+                .Append(etag)
+                .Append(oldChangeVector, existingEtagEndIndex, oldChangeVector.Length - existingEtagEndIndex);
+ 
+            return (true, vectorBuffer.ToString());
+        }
+
+        public static void ThrowConflictingEtag(string id, string changeVector, long newEtag, string dbId, string nodeTag)
+        {
+            throw new InvalidOperationException($"Tried to update the change vector '{changeVector}' but the new etag '{newEtag}' is smaller than " +
+                                                $"the etag in the change vector. DocumentId= '{id}', DatabaseId='{dbId}', NodeTag='{nodeTag}'.");
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void InitializeThreadLocalState()
+        {
+            if (_changeVectorBuffer == null)
+                _changeVectorBuffer = new StringBuilder();
+            _changeVectorBuffer.Length = 0;
+        }
+
+        [ThreadStatic] private static List<ChangeVectorEntry> _mergeVectorBuffer;
+
+
+        public static string MergeVectors(string vectorAstring, string vectorBstring)
+        {
+            if (string.IsNullOrEmpty(vectorAstring))
+                return vectorBstring;
+            if (string.IsNullOrEmpty(vectorBstring))
+                return vectorAstring;
+
+            if (_mergeVectorBuffer == null)
+                _mergeVectorBuffer = new EquatableList<ChangeVectorEntry>();
+            _mergeVectorBuffer.Clear();
+
+            ChangeVectorParser.MergeChangeVector(vectorAstring, _mergeVectorBuffer);
+            ChangeVectorParser.MergeChangeVector(vectorBstring, _mergeVectorBuffer);
+
+            return _mergeVectorBuffer.SerializeVector();
+        }
+
+        public static string MergeVectors(List<string> changeVectors)
+        {
+            if (_mergeVectorBuffer == null)
+                _mergeVectorBuffer = new EquatableList<ChangeVectorEntry>();
+            _mergeVectorBuffer.Clear();
+
+            for (int i = 0; i < changeVectors.Count; i++)
+            {
+                ChangeVectorParser.MergeChangeVector(changeVectors[i], _mergeVectorBuffer);
+            }
+
+            return _mergeVectorBuffer.SerializeVector();
+        }
+
+        public static string NewChangeVector(string nodeTag, long etag, string dbIdInBase64)
+        {
+            InitializeThreadLocalState();
+
+            return _changeVectorBuffer
+                .Append(nodeTag)
+                .Append(':')
+                .Append(etag)
+                .Append('-')
+                .Append(dbIdInBase64)
+                .ToString();
+        }
+
+        public static long GetEtagByNodeTag(string changeVector, string nodeTag)
+        {
+            var index = changeVector.IndexOf(nodeTag + ":", StringComparison.Ordinal);
+            var offset = nodeTag.Length + 1;
+            if (index == -1)
+                return 0;
+            var etag = changeVector.IndexOf('-', index);
+            return long.Parse(changeVector.Substring(index + offset, etag - index - offset));
+        }
+    }
+}

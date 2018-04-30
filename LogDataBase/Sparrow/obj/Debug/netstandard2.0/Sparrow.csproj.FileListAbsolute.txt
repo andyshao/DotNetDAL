@@ -1,0 +1,9 @@
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\bin\Debug\netstandard2.0\Sparrow.deps.json
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\bin\Debug\netstandard2.0\Sparrow.dll
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\bin\Debug\netstandard2.0\Sparrow.pdb
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\obj\Debug\netstandard2.0\Sparrow.csproj.CoreCompileInputs.cache
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\obj\Debug\netstandard2.0\Sparrow.AssemblyInfoInputs.cache
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\obj\Debug\netstandard2.0\Sparrow.AssemblyInfo.cs
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\obj\Debug\netstandard2.0\Sparrow.dll
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\obj\Debug\netstandard2.0\Sparrow.pdb
+D:\分库分表DAL\DotNetDAL\LogDataBase\Sparrow\obj\Debug\netstandard2.0\Sparrow.csprojResolveAssemblyReference.cache

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Lextm.SharpSnmpLib</id>
+    <version>10.0.4</version>
+    <title>#SNMP Library</title>
+    <authors>Malcolm Crowe,Lex Li,and other contributors.</authors>
+    <owners>Malcolm Crowe,Lex Li,and other contributors.</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://docs.sharpsnmp.com/</projectUrl>
+    <description>#SNMP (SharpSNMP) Library is an open source library for developers who target Microsoft .NET/Xamarin/Mono platforms. It's developed in C# and can be used for F#, VB.NET, Oxygene, and more.</description>
+    <releaseNotes>https://github.com/lextm/sharpsnmplib/releases</releaseNotes>
+    <copyright>All rights reserved. (c) 2008-2017 Malcolm Crowe, Lex Li, and other contributors.</copyright>
+    <tags>smi snmp mib</tags>
+    <repository type="git" url="https://github.com/lextm/sharpsnmplib.git" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.2" />
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+        <dependency id="System.ComponentModel.TypeConverter" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="System.Net.NetworkInformation" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="System.Runtime.Serialization.Primitives" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Thread" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="MonoAndroid4.4" />
+      <group targetFramework="Xamarin.iOS1.0" />
+      <group targetFramework=".NETCoreApp2.0" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Java.Interop" targetFramework="MonoAndroid4.4" />
+      <frameworkAssembly assemblyName="mscorlib" targetFramework="MonoAndroid4.4" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="MonoAndroid4.4, Xamarin.iOS1.0" />
+      <frameworkAssembly assemblyName="System" targetFramework="MonoAndroid4.4, Xamarin.iOS1.0" />
+      <frameworkAssembly assemblyName="System.Runtime" targetFramework="MonoAndroid4.4" />
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="MonoAndroid4.4, Xamarin.iOS1.0" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.5.2" />
+      <frameworkAssembly assemblyName="Xamarin.iOS" targetFramework="Xamarin.iOS1.0" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

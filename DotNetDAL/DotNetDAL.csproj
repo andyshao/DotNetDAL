@@ -14,4 +14,8 @@
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LogDataBase\Raven.Client\Raven.Client.csproj" />
+  </ItemGroup>
+
 </Project>

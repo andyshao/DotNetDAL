@@ -33,5 +33,9 @@
       "name": "dao_test1",
       "connection": "Data Source=.;Initial Catalog=Test2;User ID=sa;Password=admin;"
     }
-  ]
+  ],
+  "logDataBaseUrl": [
+    "http://localhost:8888"
+  ],
+  "logDatabase": "Test"
 }

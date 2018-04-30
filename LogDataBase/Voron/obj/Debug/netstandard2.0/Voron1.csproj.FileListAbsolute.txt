@@ -1,0 +1,12 @@
+D:\分库分表DAL\RavenDB\Test\Voron1\bin\Debug\netstandard2.0\Voron1.deps.json
+D:\分库分表DAL\RavenDB\Test\Voron1\bin\Debug\netstandard2.0\Voron1.dll
+D:\分库分表DAL\RavenDB\Test\Voron1\bin\Debug\netstandard2.0\Sparrow1.dll
+D:\分库分表DAL\RavenDB\Test\Voron1\bin\Debug\netstandard2.0\Sparrow1.pdb
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.csprojResolveAssemblyReference.cache
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.csproj.CoreCompileInputs.cache
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.AssemblyInfoInputs.cache
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.AssemblyInfo.cs
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.csproj.CopyComplete
+D:\分库分表DAL\RavenDB\Test\Voron1\bin\Debug\netstandard2.0\Voron1.pdb
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.dll
+D:\分库分表DAL\RavenDB\Test\Voron1\obj\Debug\netstandard2.0\Voron1.pdb

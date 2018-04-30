@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "515adc0f931f60760b411e45e8400a8926a1163c"
+    "signature": "2e178090f9474d449245211f300811a69d4f7262"
   },
   "compilationOptions": {},
   "targets": {
@@ -15,6 +15,12 @@
           "Demo.dll": {}
         }
       },
+      "Lambda2Js/3.1.0": {
+        "runtime": {
+          "lib/netstandard1.0/Lambda2Js.dll": {}
+        }
+      },
+      "Microsoft.CSharp/4.4.1": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
       "Microsoft.Win32.Registry/4.4.0": {
         "dependencies": {
@@ -68,6 +74,8 @@
           }
         }
       },
+      "SourceLink.Create.CommandLine/2.8.1": {},
+      "System.Buffers/4.4.0": {},
       "System.Data.SqlClient/4.4.3": {
         "dependencies": {
           "Microsoft.Win32.Registry": "4.4.0",
@@ -140,6 +148,11 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         }
       },
+      "System.Runtime.CompilerServices.Unsafe/4.4.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        }
+      },
       "System.Security.AccessControl/4.4.0": {
         "dependencies": {
           "System.Security.Principal.Windows": "4.4.0"
@@ -149,6 +162,14 @@
             "rid": "unix",
             "assetType": "runtime"
           },
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
+      "System.Security.Cryptography.Cng/4.4.0": {
+        "runtimeTargets": {
           "runtime/win/lib/_._": {
             "rid": "win",
             "assetType": "runtime"
@@ -190,9 +211,11 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "System.Threading.Tasks.Extensions/4.4.0": {},
       "DotNetDAL/1.0.0": {
         "dependencies": {
           "Newtonsoft.Json": "11.0.2",
+          "Raven.Client": "1.0.0",
           "System.Data.SqlClient": "4.4.3",
           "System.Reflection.Emit": "4.3.0",
           "System.Reflection.Emit.ILGeneration": "4.3.0",
@@ -200,6 +223,33 @@
         },
         "runtime": {
           "DotNetDAL.dll": {}
+        }
+      },
+      "Raven.Client/1.0.0": {
+        "dependencies": {
+          "Lambda2Js": "3.1.0",
+          "Microsoft.CSharp": "4.4.1",
+          "Newtonsoft.Json": "11.0.2",
+          "SourceLink.Create.CommandLine": "2.8.1",
+          "Sparrow": "1.0.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.4.0",
+          "System.Security.Cryptography.Cng": "4.4.0",
+          "System.Threading.Tasks.Extensions": "4.4.0"
+        },
+        "runtime": {
+          "Raven.Client.dll": {}
+        }
+      },
+      "Sparrow/1.0.0": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.4.1",
+          "SourceLink.Create.CommandLine": "2.8.1",
+          "System.Buffers": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.4.0",
+          "System.Threading.Tasks.Extensions": "4.4.0"
+        },
+        "runtime": {
+          "Sparrow.dll": {}
         }
       }
     }
@@ -209,6 +259,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Lambda2Js/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dPhyZK6Mffre+TJbbfx012DtHYi/Tkr7oXJqdxkUpbm7zGZksyYPWAOp8c+rraOvCx7PqxxTBM0RcOMMs15vrA==",
+      "path": "lambda2js/3.1.0",
+      "hashPath": "lambda2js.3.1.0.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A5hI3gk6WpcBI0QGZY6/d5CCaYUxJgi7iENn1uYEng+Olo8RfI5ReGVkjXjeu3VR3srLvVYREATXa2M0X7FYJA==",
+      "path": "microsoft.csharp/4.4.1",
+      "hashPath": "microsoft.csharp.4.4.1.nupkg.sha512"
     },
     "Microsoft.NETCore.Targets/1.1.0": {
       "type": "package",
@@ -258,6 +322,20 @@
       "sha512": "sha512-YhEdSQUsTx+C8m8Bw7ar5/VesXvCFMItyZF7G1AUY+OM0VPZUOeAVpJ4Wl6fydBGUYZxojTDR3I6Bj/+BPkJNA==",
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
+    },
+    "SourceLink.Create.CommandLine/2.8.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TpAeoz13+NxLJZ+xo5ZIRWc0UksmSdHmJCtZpAJWOtdzmFzD47oaYf76FwTsHXWd2OnJXQrKGJEPDdTs1pcgDg==",
+      "path": "sourcelink.create.commandline/2.8.1",
+      "hashPath": "sourcelink.create.commandline.2.8.1.nupkg.sha512"
+    },
+    "System.Buffers/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8SGHU4AhRTC4hcIrgx3P2FSZb4X+B9OwkcxydEf0ZqTwhfAeg9nA4STPoXEslJBuZrpFzBO4k3qqRdZSID7q8A==",
+      "path": "system.buffers/4.4.0",
+      "hashPath": "system.buffers.4.4.0.nupkg.sha512"
     },
     "System.Data.SqlClient/4.4.3": {
       "type": "package",
@@ -315,12 +393,26 @@
       "path": "system.runtime/4.3.0",
       "hashPath": "system.runtime.4.3.0.nupkg.sha512"
     },
+    "System.Runtime.CompilerServices.Unsafe/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SMGKDlU4tJjyUqIZ0FKyiFK7zYIWpUE5ia7NRYUmJ4XoWrPV6+Y0GgXDNi1G9D+TvRofuDcxNZEjywWdOj/x4Q==",
+      "path": "system.runtime.compilerservices.unsafe/4.4.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.4.0.nupkg.sha512"
+    },
     "System.Security.AccessControl/4.4.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-wFWgNHweFh4M1FvFK3jIZ+B9eidmL3g0CrLEXWXNj1W+UQjH3oF3sEMeXapARy63QrdemzyqwJbAYJjR3mT9jQ==",
       "path": "system.security.accesscontrol/4.4.0",
       "hashPath": "system.security.accesscontrol.4.4.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Cng/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3d/d+7sdNpfYfqJFzuE/o6Pl/reaMbH7rlUMNvtm4+XVYHY32tdFa45yjB3vhb6q0YY+IV8GUuiBPRsBFP3yaw==",
+      "path": "system.security.cryptography.cng/4.4.0",
+      "hashPath": "system.security.cryptography.cng.4.4.0.nupkg.sha512"
     },
     "System.Security.Principal.Windows/4.4.0": {
       "type": "package",
@@ -350,7 +442,24 @@
       "path": "system.threading.tasks/4.3.0",
       "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
     },
+    "System.Threading.Tasks.Extensions/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SPKfFGbpQsK5Srz2Kq3URgvC90yoOyBE8H1quDA2+MAJ2HAzFmV3biOgPv2Ck3mPAvdKngo3QHi2BNwUQDRVvA==",
+      "path": "system.threading.tasks.extensions/4.4.0",
+      "hashPath": "system.threading.tasks.extensions.4.4.0.nupkg.sha512"
+    },
     "DotNetDAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Raven.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sparrow/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

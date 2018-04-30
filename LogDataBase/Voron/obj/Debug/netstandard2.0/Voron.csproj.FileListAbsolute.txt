@@ -1,0 +1,12 @@
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\bin\Debug\netstandard2.0\Voron.deps.json
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\bin\Debug\netstandard2.0\Voron.dll
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\bin\Debug\netstandard2.0\Voron.pdb
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\bin\Debug\netstandard2.0\Sparrow.dll
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\bin\Debug\netstandard2.0\Sparrow.pdb
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.csprojResolveAssemblyReference.cache
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.csproj.CoreCompileInputs.cache
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.AssemblyInfoInputs.cache
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.AssemblyInfo.cs
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.csproj.CopyComplete
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.dll
+D:\分库分表DAL\DotNetDAL\LogDataBase\Voron\obj\Debug\netstandard2.0\Voron.pdb

@@ -1,0 +1,8 @@
+D:\分库分表DAL\RavenDB\Test\Sparrow1\obj\Debug\netstandard2.0\Sparrow1.csproj.CoreCompileInputs.cache
+D:\分库分表DAL\RavenDB\Test\Sparrow1\obj\Debug\netstandard2.0\Sparrow1.AssemblyInfoInputs.cache
+D:\分库分表DAL\RavenDB\Test\Sparrow1\obj\Debug\netstandard2.0\Sparrow1.AssemblyInfo.cs
+D:\分库分表DAL\RavenDB\Test\Sparrow1\bin\Debug\netstandard2.0\Sparrow1.deps.json
+D:\分库分表DAL\RavenDB\Test\Sparrow1\bin\Debug\netstandard2.0\Sparrow1.dll
+D:\分库分表DAL\RavenDB\Test\Sparrow1\bin\Debug\netstandard2.0\Sparrow1.pdb
+D:\分库分表DAL\RavenDB\Test\Sparrow1\obj\Debug\netstandard2.0\Sparrow1.dll
+D:\分库分表DAL\RavenDB\Test\Sparrow1\obj\Debug\netstandard2.0\Sparrow1.pdb

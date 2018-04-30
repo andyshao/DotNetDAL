@@ -19,16 +19,18 @@ namespace Demo
             BaseDao dao = BaseDaoFactory.CreateBaseDao("dao_test");
 
             ////添加
-            //for (int i = 0; i < 100000; i++)
-            //{
-            //    dao.Insert<test0>(new test0()
-            //    {
-            //        Address = "上海" + i,
-            //        Id = i,
-            //        Name = "王" + i
-            //    });
-            //    Console.WriteLine(i);
-            //}
+            for (int i = 0; i < 100000; i++)
+            {
+                dao.Insert<test0>(new test0()
+                {
+                    Address = "上海" + i,
+                    Id = i,
+                    Name = "王" + i,
+                    CreateDate=DateTime.Now
+                });
+                Console.WriteLine(i);
+                //System.Threading.Thread.Sleep(1000 * 1);
+            }
 
             /////修改
             //dao.Update<test0>(new test0()
@@ -39,14 +41,19 @@ namespace Demo
 
             //});
 
+
             //分页查询
-            IList<string> shardDb = new List<string> { "0", "1" };
-            IDictionary hints = new Dictionary<string, object>();
-            hints.Add(DALExtStatementConstant.SHARD_IDS, shardDb);
-            var query = dao.GetQuery<test0>().Paging(1, 10, "Id", false);//.Equal("Name", "王10000");
+            //IList<string> shardDb = new List<string> { "0", "1" };
+            //IDictionary hints = new Dictionary<string, object>();
+            //hints.Add(DALExtStatementConstant.SHARD_IDS, shardDb);
+            //var query = dao.GetQuery<test0>().Paging(1, 10, "Id", false);  //.Equal("Name", "王10000");
 
-            var list_ = dao.SelectList<test0>(query, hints).OrderByDescending(x => x.Id).ToList();
-
+            //while (true)
+            //{
+            //    Console.WriteLine("======================================================");
+            //    var list_ = dao.SelectList<test0>(query, hints).OrderByDescending(x => x.Id).ToList();
+            //    System.Threading.Thread.Sleep(1000 * 3);
+            //}
 
             Console.ReadLine();
         }
@@ -56,7 +63,6 @@ namespace Demo
     [Table(Name = "test0")]
     public class test0
     {
-        // 添加PK属性，根据此键修改。 
         [Column(Name = "Id"), PK]
         public int Id { get; set; }
 
@@ -67,6 +73,10 @@ namespace Demo
 
         [Column(Name = "Address")]
         public string Address { get; set; }
+
+
+        [Column(Name = "CreateDate")]
+        public DateTime CreateDate { get; set; }
 
     }
 

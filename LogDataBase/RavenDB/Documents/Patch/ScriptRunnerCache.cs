@@ -1,0 +1,140 @@
+using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using JetBrains.Annotations;
+using Raven.Client.Extensions;
+using Raven.Server.Config;
+
+namespace Raven.Server.Documents.Patch
+{
+    public class ScriptRunnerCache
+    {
+        private readonly DocumentDatabase _database;
+        private readonly RavenConfiguration _configuration;
+
+        private readonly ConcurrentDictionary<Key, Lazy<ScriptRunner>> _cache =
+            new ConcurrentDictionary<Key, Lazy<ScriptRunner>>();
+
+        private int _numberOfCachedScripts;
+        private SpinLock _cleaning = new SpinLock();
+        public bool EnableClr;
+        public static string PolyfillJs;
+
+        static ScriptRunnerCache()
+        {
+            //using (Stream stream = typeof(ScriptRunnerCache).Assembly
+            //    .GetManifestResourceStream("Raven.Server.Documents.Patch.Polyfill.js"))
+            //{
+            //    using (var reader = new StreamReader(stream))
+            //    {
+            //        PolyfillJs = reader.ReadToEnd();
+            //    }
+            //}
+
+            string path = string.Concat(Environment.CurrentDirectory, "\\Polyfill.js");
+            using (var stream = File.OpenText(path))
+            {
+                PolyfillJs = stream.ReadToEnd();
+            }
+
+        }
+
+        public ScriptRunnerCache(DocumentDatabase database, RavenConfiguration configuration)
+        {
+            _database = database;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
+
+        public abstract class Key
+        {
+            public abstract void GenerateScript(ScriptRunner runner);
+
+            public abstract override bool Equals(object obj);
+
+            public abstract override int GetHashCode();
+        }
+
+
+        public ScriptRunner.ReturnRun GetScriptRunner(Key key, bool readOnly, out ScriptRunner.SingleRun patchRun)
+        {
+            if (key == null)
+            {
+                patchRun = null;
+                return new ScriptRunner.ReturnRun();
+            }
+            var scriptRunner = GetScriptRunner(key);
+            var returnRun = scriptRunner.GetRunner(out patchRun);
+            patchRun.ReadOnly = readOnly;
+            return returnRun;
+        }
+
+
+        private ScriptRunner GetScriptRunner(Key script)
+        {
+            if (_cache.TryGetValue(script, out var lazy))
+                return lazy.Value;
+
+            return GetScriptRunnerUnlikely(script);
+        }
+
+        private ScriptRunner GetScriptRunnerUnlikely(Key script)
+        {
+            var value = new Lazy<ScriptRunner>(() =>
+            {
+                var runner = new ScriptRunner(_database, _configuration, EnableClr);
+                script.GenerateScript(runner);
+                return runner;
+            });
+            var lazy = _cache.GetOrAdd(script, value);
+            if (value != lazy)
+                return lazy.Value;
+
+            // we were the one who added it, need to check that we are there
+            var count = Interlocked.Increment(ref _numberOfCachedScripts);
+            if (count > _configuration.Patching.MaxNumberOfCachedScripts)
+            {
+                bool taken = false;
+                try
+                {
+                    _cleaning.TryEnter(ref taken);
+                    if (taken)
+                    {
+                        var numRemaining = CleanTheCache();
+                        Interlocked.Add(ref _numberOfCachedScripts, -(count - numRemaining));
+                    }
+                }
+                finally
+                {
+                    if (taken)
+                        _cleaning.Exit();
+                }
+
+            }
+            return lazy.Value;
+        }
+
+
+        private int CleanTheCache()
+        {
+
+            foreach (var pair in _cache.ForceEnumerateInThreadSafeManner().OrderBy(x => x.Value.Value.Runs)
+                .Take(_configuration.Patching.MaxNumberOfCachedScripts / 4)
+            )
+            {
+                _cache.TryRemove(pair.Key, out _);
+            }
+            int count = 0;
+            foreach (var pair in _cache)
+            {
+                count++;
+                var valueRuns = pair.Value.Value.Runs / 2;
+                Interlocked.Add(ref pair.Value.Value.Runs, -valueRuns);
+            }
+
+            return count;
+        }
+    }
+}

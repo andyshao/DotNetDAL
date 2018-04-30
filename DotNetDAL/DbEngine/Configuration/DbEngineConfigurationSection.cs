@@ -1,4 +1,5 @@
-﻿using Arch.Data.Common.Logging.Configuration;
+﻿using Arch.Data.Common.Logging;
+using Arch.Data.Common.Logging.Configuration;
 using Arch.Data.Common.Metrics.Configuration;
 using Arch.Data.Common.Tracing.Configuration;
 using DAL.DbEngine.Configuration;
@@ -22,12 +23,14 @@ namespace Arch.Data.DbEngine.Configuration
         {
             DatabaseSets = new List<DatabaseSetElement>();
             DatabaseSets = DatabaseProviderElementCollection.DatabaseSetElement();
-
             DatabaseProviders = new DatabaseProviderElementCollection();
-
             ConnectionLocator = new ConnectionLocatorElement();
-
-         
+            DefaultLogger defaultLogger = new DefaultLogger();
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                defaultLogger.RunLog();
+            });
+           
             //logListeners = new ConfigurationProperty("logListeners", typeof(ListenerElementCollection), null, ConfigurationPropertyOptions.None);
             //metrics = new ConfigurationProperty("metrics", typeof(MetricsElement), null, ConfigurationPropertyOptions.None);
             //tracing = new ConfigurationProperty("tracing", typeof(TracingElement), null, ConfigurationPropertyOptions.None);

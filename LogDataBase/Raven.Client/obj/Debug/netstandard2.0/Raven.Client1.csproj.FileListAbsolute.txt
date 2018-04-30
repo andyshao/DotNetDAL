@@ -1,0 +1,12 @@
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\bin\Debug\netstandard2.0\Raven.Client1.deps.json
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\bin\Debug\netstandard2.0\Raven.Client1.dll
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\bin\Debug\netstandard2.0\Sparrow1.dll
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\bin\Debug\netstandard2.0\Sparrow1.pdb
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.csprojResolveAssemblyReference.cache
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.csproj.CoreCompileInputs.cache
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.AssemblyInfoInputs.cache
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.AssemblyInfo.cs
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.csproj.CopyComplete
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\bin\Debug\netstandard2.0\Raven.Client1.pdb
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.dll
+D:\分库分表DAL\RavenDB\Test\Raven.Client1\obj\Debug\netstandard2.0\Raven.Client1.pdb

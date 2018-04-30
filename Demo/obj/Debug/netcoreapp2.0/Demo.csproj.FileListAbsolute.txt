@@ -26,3 +26,7 @@ D:\分库分表DAL\DotNetDAL\Demo\obj\Debug\netcoreapp2.0\Demo.AssemblyInfo.cs
 D:\分库分表DAL\DotNetDAL\Demo\obj\Debug\netcoreapp2.0\Demo.csproj.CopyComplete
 D:\分库分表DAL\DotNetDAL\Demo\obj\Debug\netcoreapp2.0\Demo.dll
 D:\分库分表DAL\DotNetDAL\Demo\obj\Debug\netcoreapp2.0\Demo.pdb
+D:\分库分表DAL\DotNetDAL\Demo\bin\Debug\netcoreapp2.0\Raven.Client.dll
+D:\分库分表DAL\DotNetDAL\Demo\bin\Debug\netcoreapp2.0\Sparrow.dll
+D:\分库分表DAL\DotNetDAL\Demo\bin\Debug\netcoreapp2.0\Raven.Client.pdb
+D:\分库分表DAL\DotNetDAL\Demo\bin\Debug\netcoreapp2.0\Sparrow.pdb

@@ -10,9 +10,14 @@ D:\分库分表DAL\DotNetDAL\DAL\obj\Debug\netstandard2.0\DotNetDAL.pdb
 D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\DotNetDAL.deps.json
 D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\DotNetDAL.dll
 D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\DotNetDAL.pdb
+D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.csprojResolveAssemblyReference.cache
 D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.csproj.CoreCompileInputs.cache
 D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.AssemblyInfoInputs.cache
 D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.AssemblyInfo.cs
 D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.dll
 D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.pdb
-D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.csprojResolveAssemblyReference.cache
+D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\Raven.Client.dll
+D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\Sparrow.dll
+D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\Raven.Client.pdb
+D:\分库分表DAL\DotNetDAL\DotNetDAL\bin\Debug\netstandard2.0\Sparrow.pdb
+D:\分库分表DAL\DotNetDAL\DotNetDAL\obj\Debug\netstandard2.0\DotNetDAL.csproj.CopyComplete
