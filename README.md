@@ -12,11 +12,11 @@ Raven.Server项目的配置文件 https://github.com/wangchengqun/DotNetDAL/blob
 
 启动成功后 在浏览器收入 http://127.0.0.1:8888 并创建数据库Test
 
-![image1](https://github.com/wangchengqun/DotNetDAL/Image/image1.png)
+![image1](https://github.com/wangchengqun/DotNetDAL/blob/master/Image/image1.png)
 
-![image2](https://github.com/wangchengqun/DotNetDAL/Image/image2.png)
+![image2](https://github.com/wangchengqun/DotNetDAL/blob/master/Image/image2.png)
 
-![image3](https://github.com/wangchengqun/DotNetDAL/Image/image3.png)
+![image3](https://github.com/wangchengqun/DotNetDAL/blob/master/Image/image3.png)
 
 一个单机版的日志数据库就部署好了。
 
