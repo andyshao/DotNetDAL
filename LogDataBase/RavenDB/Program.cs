@@ -22,47 +22,8 @@ namespace Raven.Server
         public static void Main(string[] args)
         {
 
-            // string[] configurationArgs = null;
-
-            //try
-            //{
-            //    configurationArgs = CommandLineSwitches.Process(args);
-            //}
-            //catch (CommandParsingException commandParsingException)
-            //{
-            //    Console.WriteLine(commandParsingException.Message);
-            //    CommandLineSwitches.ShowHelp();
-            //}
-
-            //if (CommandLineSwitches.ShouldShowHelp)
-            //{
-            //    CommandLineSwitches.ShowHelp();
-            //}
-
-            //if (CommandLineSwitches.PrintVersionAndExit)
-            //{
-            //    Console.WriteLine(ServerVersion.FullVersion);
-            //}
-
-            ////new WelcomeMessage(Console.Out).Print();
-
-            //var targetSettingsFile = new PathSetting(string.IsNullOrEmpty(CommandLineSwitches.CustomConfigPath)
-            //    ? "settings.json"
-            //    : CommandLineSwitches.CustomConfigPath);
-
-            //var destinationSettingsFile = new PathSetting("settings.default.json");
-
-            //if (File.Exists(targetSettingsFile.FullPath) == false &&
-            //    File.Exists(destinationSettingsFile.FullPath)) //just in case
-            //{
-            //    File.Copy(destinationSettingsFile.FullPath, targetSettingsFile.FullPath);
-            //}
-
             string path = string.Concat(Environment.CurrentDirectory, "\\settings.json");
-            var configuration = new RavenConfiguration(null, ResourceType.Server, path);//CommandLineSwitches.CustomConfigPath
-
-            //if (configurationArgs != null)
-            //    configuration.AddCommandLine(configurationArgs);
+            var configuration = new RavenConfiguration(null, ResourceType.Server, path);
 
             configuration.Initialize();
 
@@ -72,21 +33,6 @@ namespace Raven.Server
 
             if (Logger.IsOperationsEnabled)
                 Logger.Operations(RavenCli.GetInfoText());
-
-            //if (WindowsServiceRunner.ShouldRunAsWindowsService())
-            //{
-            //    try
-            //    {
-            //        WindowsServiceRunner.Run(CommandLineSwitches.ServiceName, configuration, configurationArgs);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        if (Logger.IsInfoEnabled)
-            //            Logger.Info("Error running Windows Service", e);
-
-            //    }
-
-            //}
 
             RestartServer = () =>
             {
@@ -98,22 +44,6 @@ namespace Raven.Server
             RavenConfiguration configBeforeRestart = configuration;
             do
             {
-                //if (rerun)
-                //{
-                //    Console.WriteLine("\nRestarting Server...");
-                //    rerun = false;
-
-                //    configuration = new RavenConfiguration(null, ResourceType.Server, CommandLineSwitches.CustomConfigPath);
-                //    //if (configurationArgs != null)
-                //    //{
-                //    //    var argsAfterRestart = PostSetupCliArgumentsUpdater.Process(
-                //    //        configurationArgs, configBeforeRestart, configuration);
-
-                //    //    configuration.AddCommandLine(argsAfterRestart);
-                //    //    configBeforeRestart = configuration;
-                //    //}
-                //    configuration.Initialize();
-                //}
 
                 try
                 {
@@ -134,21 +64,11 @@ namespace Raven.Server
 
                             server.Initialize();
 
-                            //if (CommandLineSwitches.PrintServerId)
-                            //    Console.WriteLine($"Server ID is {server.ServerStore.GetServerId()}.");
-
-                            //new RuntimeSettings(Console.Out).Print();
-
-                            //if (CommandLineSwitches.LaunchBrowser)
-                            //    BrowserHelper.OpenStudioInBrowser(server.ServerStore.GetNodeHttpServerUrl());
-
-                            //new ClusterMessage(Console.Out, server.ServerStore).Print();
-
                             var prevColor = Console.ForegroundColor;
                             Console.Write("Server available on: ");
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"{server.ServerStore.GetNodeHttpServerUrl()}");
-                            // Console.ForegroundColor = prevColor;
+                            Console.ForegroundColor = prevColor;
 
                             var tcpServerStatus = server.GetTcpServerStatus();
                             prevColor = Console.ForegroundColor;
@@ -157,18 +77,8 @@ namespace Raven.Server
                             Console.WriteLine($"{string.Join(", ", tcpServerStatus.Listeners.Select(l => l.LocalEndpoint))}");
                             Console.ForegroundColor = prevColor;
 
-                            //Console.WriteLine("Server started, listening to requests...");
-
-                            //prevColor = Console.ForegroundColor;
-                            //Console.ForegroundColor = ConsoleColor.DarkGray;
-                            //Console.WriteLine("TIP: type 'help' to list the available commands.");
-                            //Console.ForegroundColor = prevColor;
-
                             IsRunningNonInteractive = false;
-                            //rerun = CommandLineSwitches.NonInteractive ||
-                            //        configuration.Core.SetupMode == SetupMode.Initial
-                            //    ? RunAsNonInteractive()
-                            //    : RunInteractive(server);
+                        
                             Console.WriteLine("Server start completed");
 
                             Console.ReadLine();

@@ -25,8 +25,7 @@ namespace Demo
                 {
                     Address = "上海" + i,
                     Id = i,
-                    Name = "王" + i,
-                    CreateDate=DateTime.Now
+                    Name = "王" + i
                 });
                 Console.WriteLine(i);
                 //System.Threading.Thread.Sleep(1000 * 1);
@@ -73,10 +72,6 @@ namespace Demo
 
         [Column(Name = "Address")]
         public string Address { get; set; }
-
-
-        [Column(Name = "CreateDate")]
-        public DateTime CreateDate { get; set; }
 
     }
 
